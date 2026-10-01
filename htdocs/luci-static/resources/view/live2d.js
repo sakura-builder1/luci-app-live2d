@@ -99,7 +99,7 @@ return view.extend({
 			_('OpenAI 兼容端点，末尾不要带 /chat/completions。' +
 			  '例：https://api.deepseek.com/v1 ｜ 火山方舟 ｜ 阿里 token-plan ｜ 本地 ollama'));
 		o.default = '';
-		o.rmempty = false;
+		o.rmempty = true;              /* ★ 允许留空：关掉 AI 时不该拦着保存 */
 
 		o = s.option(form.Value, 'api_key', _('API Key'),
 			_('🔒 只存在路由器上（/etc/config/live2d）。前端只能通过 rpcd 代理调用，拿不到这个值。'));
@@ -108,7 +108,7 @@ return view.extend({
 		o = s.option(form.Value, 'model', _('模型名'),
 			_('例：gpt-4o-mini ｜ deepseek-chat ｜ qwen-plus ｜ 本地 ollama'));
 		o.default = '';
-		o.rmempty = false;
+		o.rmempty = true;              /* ★ 同样允许留空 */
 
 		o = s.option(form.TextValue, 'system_prompt', _('人格提示词'),
 			_('决定她怎么说话。改完保存即可生效。'));
