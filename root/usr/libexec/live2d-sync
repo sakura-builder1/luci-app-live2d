@@ -22,12 +22,13 @@ M=$(g main.model haru/haru_greeter_t03.model3.json)
 D=$(gb main.draggable 1)
 C=$(gb main.clickable 1)
 A=$(gb main.auto_idle 1)
+H=$(gb main.only_home 1)     # ★ 只在首页显示 ✓ 默认 1 ✓
 AI=$(gb ai.enabled 0)
 AIM=$(g ai.model '')
 SYS=$(g ai.system_prompt '')
 
 # 配置指纹 ✓ 变了前端就重置本地记忆 ✓
-STAMP=$(printf '%s' "$E$Z$M$D$C$A" | md5sum | cut -c1-10)
+STAMP=$(printf '%s' "$E$Z$M$D$C$A$H" | md5sum | cut -c1-10)
 
 # 扫描可用模型列表 ✓
 json_init
@@ -43,6 +44,7 @@ json_close_array
 json_add_boolean draggable "$D"      # jshn 要 0/1 ✗ 不是 true/false ✓
 json_add_boolean clickable "$C"      # jshn 要 0/1 ✗ 不是 true/false ✓
 json_add_boolean auto_idle "$A"      # jshn 要 0/1 ✗ 不是 true/false ✓
+json_add_boolean only_home "$H"      # ★ 只在首页显示 ✓
 json_add_boolean ai "$AI"      # jshn 要 0/1 ✗ 不是 true/false ✓
 json_add_string ai_model "$AIM"
 json_add_string sys "$SYS"

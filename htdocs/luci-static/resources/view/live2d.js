@@ -85,6 +85,12 @@ return view.extend({
 		o.default = '1';
 		o.rmempty = false;
 
+		o = s.option(form.Flag, 'only_home', _('只在首页显示'),
+			_('✓ 默认开启 ✓ 只在首页（仪表盘）显示看板娘，进其他设置页会自动隐藏 ✓ ' +
+			  '想让她跟着你逛所有页面就关掉此项。'));
+		o.default = '1';
+		o.rmempty = false;
+
 		/* ===== AI 对话（OpenAI 兼容）===== */
 		s = m.section(form.NamedSection, 'ai', 'llm', _('AI 对话 · OpenAI 兼容'),
 			_('给看板娘接上大模型。🔒 API Key 只保存在路由器上，不会下发到浏览器。'));
@@ -187,6 +193,7 @@ return view.extend({
 				draggable: b('draggable', '1'),
 				clickable: b('clickable', '1'),
 				auto_idle: b('auto_idle', '1'),
+				only_home: b('only_home', '1'),
 				stamp: 'v' + Math.floor(Date.now() / 1000)
 			};
 

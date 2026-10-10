@@ -7,7 +7,8 @@
 	var DEF = {
 		enabled: true, size: 240,
 		model: 'haru/haru_greeter_t03.model3.json',
-		draggable: true, clickable: true, auto_idle: true
+		draggable: true, clickable: true, auto_idle: true,
+		only_home: true          /* ★ 默认只在首页显示 ✓ */
 	};
 	var POS_KEY = 'live2d-widget-pos-v3';
 	var SIZE_KEY = 'live2d-widget-size-v3';
@@ -19,7 +20,8 @@
 	function stampOf(o) {
 		return 'v' + [ o.enabled !== false ? 1 : 0, o.size, o.model,
 			o.draggable !== false ? 1 : 0, o.clickable !== false ? 1 : 0,
-			o.auto_idle !== false ? 1 : 0 ].join('|');
+			o.auto_idle !== false ? 1 : 0,
+			o.only_home !== false ? 1 : 0 ].join('|');
 	}
 
 	/* 首选：直接读 uci ✓ 立刻反映配置页的改动 ✓ */
@@ -47,6 +49,7 @@
 						draggable: b('draggable', '1'),
 						clickable: b('clickable', '1'),
 						auto_idle: b('auto_idle', '1'),
+						only_home: b('only_home', '1'),
 						ai: String(gl('enabled', '0')) === '1',
 						aiModel: gl('model', ''),
 						sys: gl('system_prompt', '')
@@ -74,10 +77,28 @@
 		});
 	}
 
+	/* ---- 是否在「首页」：LuCI 里标题就叫「首页」的 sakura-home 仪表盘 ✓ ---- */
+	function isHomePage() {
+		try {
+			var p = (window.location.pathname || '') + (window.location.search || '');
+			if (p.indexOf('/admin/sakura-home') >= 0) return true;
+			var rp = (window.L && window.L.env && window.L.env.requestpath) ?
+				window.L.env.requestpath.join('/') : null;
+			if (rp === 'admin/sakura-home') return true;
+			if (rp === '') return true;              /* 根路径会重定向到首页 ✓ */
+			if (/\/(cgi-bin\/)?luci\/?$/.test(window.location.pathname || '')) return true;
+		} catch (e) { }
+		return false;
+	}
+
 	/* 无论哪步出错都要有反应 ✓ 绝不静默失败 ✓ */
 	function safeBoot(cfg, why) {
 		cfg = Object.assign({}, DEF, cfg || {});
 		if (cfg.enabled === false) { console.log('[live2d] 插件已关闭'); return; }
+		if (cfg.only_home !== false && !isHomePage()) {
+			console.log('[live2d] 「只在首页显示」已开启 ✓ 本页不加载 ✓');
+			return;
+		}
 		try {
 			boot(cfg);
 			console.log('[live2d] 启动 ✓ 模型=' + cfg.model + ' 大小=' + cfg.size +
@@ -266,8 +287,9 @@
 				localStorage.removeItem(SIZE_KEY);
 			} catch (e) { }
 			applySize(parseInt(cfg.size, 10) || 240);
-			box.style.left = '18px'; box.style.top = 'auto';
-			box.style.right = 'auto'; box.style.bottom = '12px';
+			/* ★ 重置回默认位置：右下角 ✓（与 CSS 一致 ✓） */
+			box.style.right = '18px'; box.style.top = 'auto';
+			box.style.left = 'auto'; box.style.bottom = '12px';
 			refitSoon();
 		});
 		bindBtn('hide', function () {

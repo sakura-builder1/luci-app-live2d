@@ -1,6 +1,6 @@
 /* Live2D 看板娘 ✓ 跟随樱花主题 */
 #live2d-box {
-	position: fixed; left: 18px; bottom: 12px;   /* 左下角 ✓ 避开 LuCI 右下角的操作按钮 ✓ */
+	position: fixed; right: 18px; bottom: 12px; left: auto;   /* ★ 默认右下角 ✓ */
 	width: 240px; height: 350px;
 	/* 不用 overflow:hidden ✗ canvas 自己会裁剪画面 ✓ 气泡才能显示到框外 ✓ */
 	pointer-events: none;    /* ✓ 默认整块穿透 ✗ 不挡页面点击 ✓ */
@@ -68,7 +68,7 @@
 /* 手机端小一点 */
 @media (max-width: 768px) {
 	/* 不再用 !important 写死尺寸 ✗ 否则 +/− 按钮会失效 ✓ */
-	#live2d-box { left: 8px; right: auto; bottom: 8px; }
+	#live2d-box { right: 8px; left: auto; bottom: 8px; }
 	.l2d-btn { width: 26px; height: 26px; font-size: 15px; }
 }
 
