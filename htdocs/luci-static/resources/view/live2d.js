@@ -235,7 +235,7 @@ return view.extend({
 		var fill = E('div', { 'style': 'height:100%;width:0;background:linear-gradient(90deg,#ff9ec4,#c9a4ff);transition:width .2s' });
 		var bar = E('div', { 'style': 'display:none;height:6px;border-radius:3px;overflow:hidden;margin-top:8px;background:rgba(140,160,200,.25);width:100%' }, [ fill ]);
 		var msg = E('div', { 'style': 'margin-top:6px;font-size:12px;line-height:1.6;color:#8ea8c8' },
-			_('选一个 .zip（里面要有 .model3.json 和 .moc3），≤64MB。上传后会自动解压、加入模型列表并切换过去 ✓'));
+			_('选一个 .zip（里面要有 .model3.json 和 .moc3），≤4GB。上传后会自动解压、加入模型列表并切换过去 ✓'));
 
 		function say(txt, color) {
 			msg.style.color = color || '#8ea8c8';
@@ -247,7 +247,7 @@ return view.extend({
 			var f = fileIn.files && fileIn.files[0];
 			if (!f) return say(_('先选一个 .zip 文件呀～'), '#ffb3c8');
 			if (!/\.zip$/i.test(f.name)) return say(_('只支持 .zip 压缩包 ✗'), '#ffb3c8');
-			if (f.size > 67108864) return say(_('文件超过 64MB ✗'), '#ffb3c8');
+			if (f.size > 4294967296) return say(_('文件超过 4GB ✗'), '#ffb3c8');
 			btn.disabled = true;
 			bar.style.display = 'block';
 			fill.style.width = '0%';
